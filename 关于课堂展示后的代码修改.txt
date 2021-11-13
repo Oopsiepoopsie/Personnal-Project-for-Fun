@@ -1,0 +1,185 @@
+#此最终版本对课堂展示代码进行了简单修改，主要对table_generator()函数进行了修改简化，并进行整体调试简单修改
+
+#以下为课堂展示代码，修改简化后的代码采用数组叠加，通过递归实现多层嵌套，且可以随意控制选课数量
+
+
+
+#修改前原代码：
+#多层嵌套实现排课，最多选十门课
+        def table_generator(course_info):
+            global flag, count
+            count = len(course_info)
+            flag = False
+            final_tables=[]
+            #第一门课
+            for i in range(len(course_info[0])):
+                timetable = np.zeros((5,6),dtype=int).astype(dtype=str)    #生成输出表，行表示"星期"，列表示"时间段"，可以再通过.T转置来最后输出    
+                for j in course_info[0][i]:
+                    if isinstance(j, list):
+                        if timetable[j[0]][j[1]]!='0':
+                            flag = True
+                            break
+                        else:    
+                            timetable[j[0]][j[1]] = course_info[0][i][0]
+                if flag:
+                    flag = False
+                    continue
+                if count == 1:
+                    final_tables.append(timetable)
+                    #display(pd.DataFrame(timetable.T))
+                    continue
+                #第二门课
+                for k in range(len(course_info[1])):                     #当前课程的不同门课
+                    table_1 = timetable.copy()
+                    for l in course_info[1][k]:                          #各门课的时间段
+                        if isinstance(l, list):
+                            if table_1[l[0]][l[1]]!='0':
+                                flag = True
+                                break
+                            else:
+                                table_1[l[0]][l[1]] = course_info[1][k][0]
+                    if flag:
+                        flag = False
+                        continue
+                    if count == 2:
+                        final_tables.append(table_1)
+                        #display(pd.DataFrame(table_1.T))
+                        continue
+                    #第三门课
+                    for m in range(len(course_info[2])):
+                        table_2 = table_1.copy()
+                        for n in course_info[2][m]:
+                            if isinstance(n, list):
+                                if table_2[n[0]][n[1]]!='0':
+                                    flag = True
+                                    break
+                                else:
+                                    table_2[n[0]][n[1]] = course_info[2][m][0]
+                        if flag:                          #判断出现课程时间冲突后，直接跳出进入下一门不同时间段的课
+                            flag = False                   
+                            continue
+                        if count == 3:
+                            final_tables.append(table_2)
+                            #display(pd.DataFrame(table_2.T))
+                            continue
+                        #第四门课
+                        for o in range(len(course_info[3])):
+                            table_3 = table_2.copy()
+                            for p in course_info[3][o]:
+                                if isinstance(p, list):
+                                    if table_3[p[0]][p[1]]!='0':
+                                        flag = True
+                                        break
+                                    else:
+                                        table_3[p[0]][p[1]] = course_info[3][o][0]
+                            if flag:
+                                flag = False
+                                continue
+                            if count == 4:                       #判断选了几门课,从而是否执行下面的嵌套操作
+                                final_tables.append(table_3)
+                                #display(pd.DataFrame(table_3.T))
+                                continue
+                            #第五门课
+                            for q in range(len(course_info[4])):
+                                table_4 = table_3.copy()
+                                for r in course_info[4][q]:
+                                    if isinstance(r, list):
+                                        if table_4[r[0]][r[1]]!='0':
+                                            flag = True
+                                            break
+                                        else:
+                                            table_4[r[0]][r[1]] = course_info[4][q][0]
+                                if flag:
+                                    flag = False
+                                    continue
+                                if count == 5:
+                                    final_tables.append(table_4)
+                                    #display(pd.DataFrame(table_4.T))
+                                    continue
+                                #第六门课
+                                for s in range(len(course_info[5])):
+                                    table_5 = table_4.copy()                      #.copy()精华点，为了每次恢复成原表格避免重复
+                                    for t in course_info[5][s]:
+                                        if isinstance(t, list): 
+                                            if table_5[t[0]][t[1]]!='0':
+                                                flag = True
+                                                break
+                                            else:
+                                                table_5[t[0]][t[1]] = course_info[5][s][0]
+                                    if flag:
+                                        flag = False
+                                        continue                            
+                                    if count == 6:
+                                        final_tables.append(table_5)
+                                        #display(pd.DataFrame(table_5.T))
+                                        continue
+                                    #第七门课
+                                    for u in range(len(course_info[6])):
+                                        table_6 = table_5.copy()
+                                        for v in course_info[6][u]:
+                                            if isinstance(v, list):
+                                                if table_6[v[0]][v[1]]!='0':
+                                                    flag = True
+                                                    break
+                                                else:
+                                                    table_6[v[0]][v[1]] = course_info[6][u][0]
+                                        if flag:
+                                            flag = False
+                                            continue
+                                        if count == 7:
+                                            final_tables.append(table_6)
+                                            #display(pd.DataFrame(table_6.T))
+                                            continue   
+                                        #第八门课
+                                        for w in range(len(course_info[7])):
+                                            table_7 = table_6.copy()
+                                            for x in course_info[7][w]:
+                                                if isinstance(x, list):
+                                                    if table_7[x[0]][x[1]]!='0':
+                                                        flag = True
+                                                        break
+                                                    else:
+                                                        table_7[x[0]][x[1]] = course_info[7][w][0]
+                                            if flag:
+                                                flag = False
+                                                continue
+                                            if count == 8:
+                                                final_tables.append(table_7)
+                                                #display(pd.DataFrame(table_7.T))
+                                                continue
+                                            #第九门课
+                                            for y in range(len(course_info[8])):
+                                                table_8 = table_7.copy()
+                                                for z in course_info[8][y]:
+                                                    if isinstance(z, list):
+                                                        if table_8[z[0]][z[1]]!='0':
+                                                            flag = True
+                                                            break
+                                                        else:
+                                                            table_8[z[0]][z[1]] = course_info[8][y][0]
+                                                if flag:
+                                                    flag = False
+                                                    continue
+                                                if count == 9:
+                                                    final_tables.append(table_8)
+                                                    #display(pd.DataFrame(table_8.T))
+                                                    continue 
+                                                #第十门课
+                                                for a in range(len(course_info[9])):
+                                                    table_9 = table_8.copy()
+                                                    for b in course_info[9][a]:
+                                                        if isinstance(b, list):
+                                                            if table_9[b[0]][b[1]]!='0':
+                                                                flag = True
+                                                                break
+                                                            else:
+                                                                table_9[b[0]][b[1]] = course_info[9][a][0]
+                                                    if flag:
+                                                        flag = False
+                                                        continue
+                                                    if count == 10:
+                                                        final_tables.append(table_9)
+                                                        #display(pd.DataFrame(table_9.T))
+                                                        continue
+
+            return final_tables
